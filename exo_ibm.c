@@ -3,8 +3,8 @@
 # include <time.h>
 
 // define constants
-// max time step
-int maxTs = 10;
+// // max time step
+// int maxTs = 10;
 
 // World's size
 int S = 40;
@@ -12,14 +12,14 @@ int S = 40;
 // initial pop
 int popInit = 10;
 
-// birth probability
-float pB = 0.1;
+// // birth probability
+// float pB = 0.1;
 
-// death probability 
-float pD = 0.1;
+// // death probability 
+// float pD = 0.1;
 
-// maximal moving distance (could be a proportion of world's size)
-int maxDist = 2;
+// // maximal moving distance (could be a proportion of world's size)
+// int maxDist = 2;
 
 int main(int argc, char const *argv[])
 {
@@ -42,65 +42,97 @@ int main(int argc, char const *argv[])
 	// maximal moving distance (could be a proportion of world's size)
 	int maxDist = argv[6]; */
 
-	// define variables
-	// horizontal position
-	int x;
+	// // define variables
+	// // horizontal position
+	// int x;
 
-	// vertical position
-	int y;
+	// // vertical position
+	// int y;
 
-	// dead or alive
-	int DoA;
+	// // dead or alive
+	// int DoA;
 
 	// random generator seed
 	srand(time(NULL));
 
-	// build the pop table
+	// build the initial pop table
 	// pointer to pointers
-	double **pop_table;
+	int **pop_table;
  
  	// as many column as variables 
-  	col_number = 3;
+  int col_number = 3;
   
-  	pop_table = malloc(popInit * sizeof(double *));
-  	for(row = 0; row < popInit; ++row)
-  	{
-      	*(pop_table + row) = malloc(col_number * sizeof(double));
-  	}
-  	
-  	// random values for the first two columns
-  	for (int i = 0; i < 1; ++i)
-  	{
-  		for (int row = 0; row < popInit; ++row)
-  		{
-  			// generate a random number between 0 and S
+	// allocate memory
+  pop_table = malloc(popInit * sizeof(int *));
+	for(int row = 0; row < popInit; ++row)
+	{
+    	*(pop_table + row) = malloc(col_number * sizeof(int));
+	}
 
-  			// assign it
-  			*(*(pop_table + i) + row) = 3;
-  		}
-  	}
-  	
-  	// every ind is alive at first
-  	for(row = 0; row < popInit; ++row)
-  	{
-      	*(*(pop_table + 2) + row) = 1;
-  	}
+	//for (int i = 0; i < 1; ++i)
+	//{
+		for (int row = 0; row < popInit; ++row)
+		{   
+      // random values for the first two columns
+			// generate 2 random numbers between 0 and S included
+      int r1 = rand() % (S+1);
+      int r2 = rand() % (S+1);
 
-  	for(row = 0; row < popInit; row++){
-    	for(col = 0; col < col_number; col++){
-      		printf("%f\t", *(*(pop_table + row) + col) );
-    	}
-    	printf("\n");
+			// assign it
+			*(*(pop_table + row) + 0) = r1;
+      *(*(pop_table + row) + 1) = r2;
+
+      // every ind is alive at first
+      *(*(pop_table + row) + 2) = 1;
+		}
+	//}
+
+  // debug OK
+  printf("pop init check \nx\ty\tDoA\t \n");
+	for(int row = 0; row < popInit; row++)
+  {
+  	for(int col = 0; col < col_number; col++)
+    {
+  		printf("%d\t", *(*(pop_table + row) + col) );
   	}
-  
-  	for(row = 0; row < popInit; row++){
-    	free(*(pop_table + row));
-  	}
-  	free(pop_table);
+	  printf("\n");
+  }
+
+  // birth function
+  // takes pop_table in and returns a new version of it
+  /* type of return */ update_birth (/* arguments ? */)
+  {
+    // while loop on individuals
+
+
+    // test for birth
+    // generate a random number between 0 and 1
+    float test = rand()/(RAND_MAX+1.0);
+
+    // test
+    if (test > pB)
+    {
+      return(** pop_);
+    }
+
+    // allocate memory for a new line at the end of the table
+
+    // assign same position and a 1 to the DoA column
+
+    // update pop_table
+
+    return(pop_table); 
+  }
+
+  // free memory in the end
+  for(int row = 0; row < popInit; row++){
+  	free(*(pop_table + row));
+  }
+  free(pop_table);
 
 	return 0;
 }
 
-// generate a random number between 0 and 1
-  			int r = rand();
-  			float test = r/(RAND_MAX+1.0);
+// // generate a random number between 0 and 1
+// int r = rand();
+// float test = r/(RAND_MAX+1.0);
