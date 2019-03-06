@@ -91,41 +91,113 @@ int main(int argc, char const *argv[])
   printf("pop init check \nx\ty\tDoA\t \n");
 	for(int row = 0; row < popInit; row++)
   {
-  	for(int col = 0; col < col_number; col++)
+  	for(int col = 0; col < col_number; ++col)
     {
   		printf("%d\t", *(*(pop_table + row) + col) );
   	}
 	  printf("\n");
   }
+  // printf("sizeof(pop_table) is %lu \n", sizeof(pop_table));
+  // printf("sizeof(**pop_table) is %lu \n", sizeof(**pop_table));
+  // printf("sizeof(*pop_table) is %lu \n", sizeof(*pop_table));
+  // printf("sizeof(pop_table[0]) is %lu \n", sizeof(pop_table[0]));
+  // printf("sizeof(pop_table[0][0]) is %lu \n", sizeof(pop_table[0][0]));
 
-  // birth function
-  // takes pop_table in and returns a new version of it
-  /* type of return */ update_birth (/* arguments ? */)
+  // initiate a variable for the size of pop_table
+  int pop_size = popInit;
+
+  // // death function
+  // // takes pop_table in and returns a new version of it
+  /* type of return */ update_birth (/* pop_table */)
   {
-    // while loop on individuals
+    // // count of the deaths
+    // int deaths = 0;
 
-
-    // test for birth
-    // generate a random number between 0 and 1
-    float test = rand()/(RAND_MAX+1.0);
-
-    // test
-    if (test > pB)
+    // while/for loop on individuals in pop_table
+    for (int row = 0; row < pop_size; ++row)
     {
-      return(** pop_);
+      // test for death
+      // generate a random number between 0 and 1
+      float test = rand()/(RAND_MAX+1.0);
+
+      // test
+      if (test < pB)
+      {
+        *(*(pop_table + row) + 2) = 0;
+        deaths += 1;
+      }
     }
 
-    // allocate memory for a new line at the end of the table
+    // update pop_size
+    pop_size -= deaths; 
 
-    // assign same position and a 1 to the DoA column
+    // create a new table with the right size
+    // pointer to pointers
+    int **temp_table;
+ 
+    // as many column as variables 
+    int temp_col_nb = 3;
+  
+    // allocate memory
+    temp_table = malloc(pop_size * sizeof(int *));
+    for(int row = 0; row < pop_size; ++row)
+    {
+      *(temp_table + row) = malloc(temp_col_nb * sizeof(int));
+    }
 
-    // update pop_table
+    for (int row = 0; row < popInit; ++row)
+    {   
+      // random values for the first two columns
+      // generate 2 random numbers between 0 and S included
+      int r1 = rand() % (S+1);
+      int r2 = rand() % (S+1);
 
-    return(pop_table); 
+      // assign it
+      *(*(pop_table + row) + 0) = r1;
+      *(*(pop_table + row) + 1) = r2;
+
+      // every ind is alive at first
+      *(*(pop_table + row) + 2) = 1;
+    }
+
+    // track the living and copy their values to the new table
+
+    // free the old table
+
+    // rename the old table correctly
+
+    return(/* pop_table */); 
   }
 
+  // // birth function for the survivors
+  // // takes pop_table in and returns a new version of it
+  // /* type of return */ update_birth (/* arguments ? */)
+  // {
+  //   // while/for loop on individuals in pop_table
+  //   // how many rows?
+
+
+  //   // test for birth
+  //   // generate a random number between 0 and 1
+  //   float test = rand()/(RAND_MAX+1.0);
+
+  //   // test
+  //   if (test > pB)
+  //   {
+  //     return(** pop_);
+  //   }
+
+  //   // allocate memory for a new line at the end of the table
+
+  //   // assign same position and a 1 to the DoA column
+
+  //   // update pop_table
+
+  //   return(pop_table); 
+  // }
+
   // free memory in the end
-  for(int row = 0; row < popInit; row++){
+  for(int row = 0; row < popInit; ++row){
   	free(*(pop_table + row));
   }
   free(pop_table);
