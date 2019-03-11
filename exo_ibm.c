@@ -4,7 +4,7 @@
 
 // define constants
 // max time step
-int maxTs = 4;
+int maxTs = 3;
 
 // World's size
 int S = 40;
@@ -65,16 +65,16 @@ void update_death(int **tab_in)
 
   /* here could be introduced a break if death_count = 0: "don't even touch pop_table" */
 
-  // // debug OK
-  // printf("after selection \n");
-  // for(int row = 0; row < pop_size; row++)
-  // {
-  //   for(int col = 0; col < col_number; ++col)
-  //   {
-  //     printf("%d\t", *(*(tab_in + row) + col) );
-  //   }
-  //   printf("\n");
-  // } 
+  // debug OK
+  printf("after selection \n");
+  for(int row = 0; row < pop_size; row++)
+  {
+    for(int col = 0; col < col_number; ++col)
+    {
+      printf("%d\t", *(*(tab_in + row) + col) );
+    }
+    printf("\n");
+  } 
 
   // new table size
   pop_alive = pop_size - death_count;
@@ -86,16 +86,16 @@ void update_death(int **tab_in)
     *(tab_out + row) = malloc(col_number * sizeof(int));
   }
 
-  // // debug OK
-  // printf("fresh tab_out\n");
-  // for(int row = 0; row < pop_alive; row++)
-  // {
-  //   for(int col = 0; col < col_number; ++col)
-  //   {
-  //     printf("%d\t", *(*(tab_out + row) + col) );
-  //   }
-  //   printf("\n");
-  // } 
+  // debug OK
+  printf("fresh tab_out\n");
+  for(int row = 0; row < pop_alive; row++)
+  {
+    for(int col = 0; col < col_number; ++col)
+    {
+      printf("%d\t", *(*(tab_out + row) + col) );
+    }
+    printf("\n");
+  } 
 
   // track the living and copy their values to the new table
 
@@ -118,16 +118,16 @@ void update_death(int **tab_in)
     }
   }
 
-  // // debug OK
-  // printf("copy survivors from tab_in to tab_out \n");
-  // for(int row = 0; row < pop_alive; row++)
-  // {
-  //   for(int col = 0; col < col_number; ++col)
-  //   {
-  //     printf("%d\t", *(*(tab_out + row) + col) );
-  //   }
-  //   printf("\n");
-  // } 
+  // debug OK
+  printf("copy survivors from tab_in to tab_out \n");
+  for(int row = 0; row < pop_alive; row++)
+  {
+    for(int col = 0; col < col_number; ++col)
+    {
+      printf("%d\t", *(*(tab_out + row) + col) );
+    }
+    printf("\n");
+  } 
 
   // free the old table
   for(int row = 0; row < pop_size; ++row)
@@ -159,16 +159,16 @@ void update_death(int **tab_in)
       }
   }
 
-  // // debug OK
-  // printf("new pop_table \n");
-  // for(int row = 0; row < pop_size; row++)
-  // {
-  //   for(int col = 0; col < col_number; ++col)
-  //   {
-  //     printf("%d\t", *(*(pop_table + row) + col) );
-  //   }
-  //   printf("\n");
-  // } 
+  // debug OK
+  printf("new pop_table \n");
+  for(int row = 0; row < pop_size; row++)
+  {
+    for(int col = 0; col < col_number; ++col)
+    {
+      printf("%d\t", *(*(pop_table + row) + col) );
+    }
+    printf("\n");
+  } 
 
   // free tab_out
   for(int row = 0; row < pop_size; ++row)
