@@ -66,7 +66,7 @@ void update_death(int **tab_in)
   /* here could be introduced a break if death_count = 0: "don't even touch pop_table" */
 
   // debug OK
-  printf("after selection \n");
+  printf("after selection \nx\ty\tDoA\tRepro\n");
   for(int row = 0; row < pop_size; row++)
   {
     for(int col = 0; col < col_number; ++col)
@@ -87,7 +87,7 @@ void update_death(int **tab_in)
   }
 
   // debug OK
-  printf("fresh tab_out\n");
+  printf("fresh tab_out\nx\ty\tDoA\tRepro\n");
   for(int row = 0; row < pop_alive; row++)
   {
     for(int col = 0; col < col_number; ++col)
@@ -119,7 +119,7 @@ void update_death(int **tab_in)
   }
 
   // debug OK
-  printf("copy survivors from tab_in to tab_out \n");
+  printf("copy survivors from tab_in to tab_out \nx\ty\tDoA\tRepro\n");
   for(int row = 0; row < pop_alive; row++)
   {
     for(int col = 0; col < col_number; ++col)
@@ -160,7 +160,7 @@ void update_death(int **tab_in)
   }
 
   // debug OK
-  printf("new pop_table \n");
+  printf("new pop_table \nx\ty\tDoA\tRepro\n");
   for(int row = 0; row < pop_size; row++)
   {
     for(int col = 0; col < col_number; ++col)
@@ -176,118 +176,6 @@ void update_death(int **tab_in)
     free(*(tab_out + row));
   }
   free(tab_out);
-
-}
-
-// birth function for the survivors
-// takes pop_table in and updates it
-void update_birth(int **tab_in)
-{
-  // local variables
-  // count of births
-  int birth_count = 0;
-
-  // pop_size tracker
-  int pop_new;
-
-  // new table right sized
-  // pointer to pointers
-  int **tab_out;
-
-  // while/for loop on individuals in pop_table
-  for (int row = 0; row < pop_size; ++row)
-  {
-    // test for death
-    // generate a random number between 0 and 1
-    float r = rand()/(RAND_MAX);
-
-    // test
-    if (r < pB)
-    {
-      *(*(tab_in + row) + 3) = 1;
-      birth_count += 1;
-    }
-  } 
-
-    // update pop_size
-    pop_new = pop_size + birth_count;
-  
-    // allocate memory to tab_out
-    tab_out = malloc(pop_new * sizeof(int *));
-    for(int row = 0; row < pop_new; ++row)
-    {
-      *(tab_out + row) = malloc(col_number * sizeof(int));
-    }
-
-    // debug
-    for(int row = 0; row < pop_new; row++)
-    {
-      for(int col = 0; col < col_number; ++col)
-      {
-        printf("%d\t", *(*(tab_out + row) + col) );
-      }
-      printf("\n");
-    } 
-
-    /* browse individuals and copy their values to the new table
-       if they reproduced, the new born have the same coordinates */
-
-    // initialize a tracker for the individuals that reproduced (between 0 and birth_count not included)
-    int k = 0;
-
-    // browsing loop
-    for (int row = 0; row < pop_size; ++row)
-    {
-      for (int col = 0; col < col_number; ++col)
-      {
-        *(*(tab_out + row) + col) = *(*(tab_in + row) + col);
-
-        // if the individual reproduced
-        if (*(*(tab_in + row) + 3) == 1 && k < birth_count)
-        {
-          // new born has the same x and y as parent
-          if (col == 0 || col == 1) {*(*(tab_out + pop_size + k) + col) = *(*(tab_in + row) + col);}
-
-          // is alive and has not reproduced yet
-          if (col == 2) {*(*(tab_out + pop_size + k) + col) = 1;}
-          if (col == 3) {*(*(tab_out + pop_size + k) + col) = 0;}
-
-          // increment i
-          k += 1;
-        }
-      }
-    }
-
-    // debug
-    for(int row = 0; row < pop_new; row++)
-    {
-      for(int col = 0; col < col_number; ++col)
-      {
-        printf("%d\t", *(*(tab_out + row) + col) );
-      }
-      printf("\n");
-    } 
-
-    // free the old table
-    for(int row = 0; row < pop_size; ++row)
-    {
-      free(*(tab_in + row));
-    }
-    free(tab_in);
-
-    // update pop_size
-    pop_size = pop_new;
-
-    // build the new pop table
-    // pointer to pointers
-    int **pop_table;
-  
-    // allocate memory
-    pop_table = malloc(pop_size * sizeof(int *));
-    for(int row = 0; row < pop_size; ++row)
-    {
-        *(pop_table + row) = malloc(col_number * sizeof(int));
-    }
 
 }
 
@@ -425,4 +313,116 @@ int main(int argc, char const *argv[])
   free(pop_table);
 
 	return 0;
+}
+
+// birth function for the survivors NOT READY FOR CORRECTION
+// takes pop_table in and updates it
+void update_birth(int **tab_in)
+{
+  // local variables
+  // count of births
+  int birth_count = 0;
+
+  // pop_size tracker
+  int pop_new;
+
+  // new table right sized
+  // pointer to pointers
+  int **tab_out;
+
+  // while/for loop on individuals in pop_table
+  for (int row = 0; row < pop_size; ++row)
+  {
+    // test for death
+    // generate a random number between 0 and 1
+    float r = rand()/(RAND_MAX);
+
+    // test
+    if (r < pB)
+    {
+      *(*(tab_in + row) + 3) = 1;
+      birth_count += 1;
+    }
+  } 
+
+    // update pop_size
+    pop_new = pop_size + birth_count;
+  
+    // allocate memory to tab_out
+    tab_out = malloc(pop_new * sizeof(int *));
+    for(int row = 0; row < pop_new; ++row)
+    {
+      *(tab_out + row) = malloc(col_number * sizeof(int));
+    }
+
+    // debug
+    for(int row = 0; row < pop_new; row++)
+    {
+      for(int col = 0; col < col_number; ++col)
+      {
+        printf("%d\t", *(*(tab_out + row) + col) );
+      }
+      printf("\n");
+    } 
+
+    /* browse individuals and copy their values to the new table
+       if they reproduced, the new born have the same coordinates */
+
+    // initialize a tracker for the individuals that reproduced (between 0 and birth_count not included)
+    int k = 0;
+
+    // browsing loop
+    for (int row = 0; row < pop_size; ++row)
+    {
+      for (int col = 0; col < col_number; ++col)
+      {
+        *(*(tab_out + row) + col) = *(*(tab_in + row) + col);
+
+        // if the individual reproduced
+        if (*(*(tab_in + row) + 3) == 1 && k < birth_count)
+        {
+          // new born has the same x and y as parent
+          if (col == 0 || col == 1) {*(*(tab_out + pop_size + k) + col) = *(*(tab_in + row) + col);}
+
+          // is alive and has not reproduced yet
+          if (col == 2) {*(*(tab_out + pop_size + k) + col) = 1;}
+          if (col == 3) {*(*(tab_out + pop_size + k) + col) = 0;}
+
+          // increment i
+          k += 1;
+        }
+      }
+    }
+
+    // debug
+    for(int row = 0; row < pop_new; row++)
+    {
+      for(int col = 0; col < col_number; ++col)
+      {
+        printf("%d\t", *(*(tab_out + row) + col) );
+      }
+      printf("\n");
+    } 
+
+    // free the old table
+    for(int row = 0; row < pop_size; ++row)
+    {
+      free(*(tab_in + row));
+    }
+    free(tab_in);
+
+    // update pop_size
+    pop_size = pop_new;
+
+    // build the new pop table
+    // pointer to pointers
+    int **pop_table;
+  
+    // allocate memory
+    pop_table = malloc(pop_size * sizeof(int *));
+    for(int row = 0; row < pop_size; ++row)
+    {
+        *(pop_table + row) = malloc(col_number * sizeof(int));
+    }
+
 }
