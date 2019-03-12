@@ -25,13 +25,26 @@ int maxDist = 3;
 int col_number = 4;
 
 // declare tracked variables
-
 // population size tracker
 int pop_size;
 
+
+// define tab_out?
+  // new table right sized
+  // pointer to pointers
+  int **tab_out;
+
+  // allocate memory to tab_out
+  tab_out = malloc(pop_alive * sizeof(int *));
+  for(int row = 0; row < pop_alive; ++row)
+  {
+    *(tab_out + row) = malloc(col_number * sizeof(int));
+  }
+
+
 // death function
 // takes pop_table in and updates it
-void update_death(int **tab_in)
+void update_death(int **tab_in, int **tab_out)
 {
   // local variables
   // count of births
@@ -39,10 +52,6 @@ void update_death(int **tab_in)
 
   // pop_size tracker
   int pop_alive;
-
-  // new table right sized
-  // pointer to pointers
-  int **tab_out;
 
   // while/for loop on individuals in pop_table
   for (int row = 0; row < pop_size; ++row)
@@ -78,13 +87,6 @@ void update_death(int **tab_in)
 
   // new table size
   pop_alive = pop_size - death_count;
-
-  // allocate memory to tab_out
-  tab_out = malloc(pop_alive * sizeof(int *));
-  for(int row = 0; row < pop_alive; ++row)
-  {
-    *(tab_out + row) = malloc(col_number * sizeof(int));
-  }
 
   // debug OK
   printf("fresh tab_out\nx\ty\tDoA\tRepro\n");
