@@ -2,6 +2,15 @@
 # include <stdlib.h>
 # include <time.h>
 
+/*
+ * BD: C code compiled and run using the BASH commands below
+ * 
+ * gcc -ansi -Wall -pedantic -std=c99 exo_ibm_v2.c -o exo_ibm_v2
+ * 
+ * ./exo_ibm_v2
+ * 
+ */
+
 
 /* function declaration */
 void update_movement (int **tab_in, int pop_size, int maxDist, int S);
@@ -24,10 +33,10 @@ int main(int argc, char const *argv[])
   int popInit = 10;
 
   // birth probability
-  float pB = 0.1;
+  float pB = 0.0;
 
   // death probability 
-  float pD = 0.1;
+  float pD = 0.0;
 
   // maximal moving distance (could be a proportion of world's size)
   int maxDist = 3;
@@ -217,10 +226,10 @@ int main(int argc, char const *argv[])
 
     /* PROBLEM lIES HEREAFTER */
     /* swap does not work */
-
     // swap temp_table and pop_table
-    swap_ptrs(pop_table, temp_table);
-
+    swap_ptrs((void*)&(pop_table), (void*)&temp_table);
+    
+    
     /* let's try something else */
 /*    // update pop_table pointers*/
 /*    **pop_table = **temp_table;*/
