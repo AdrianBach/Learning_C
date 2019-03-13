@@ -7,7 +7,8 @@
 void update_movement (int **tab_in, int pop_size, int maxDist, int S);
 int update_death(int **tab_in, int pop_size, float pD);
 int update_birth(int **tab_in, int pop_size, int pop_alive, float pB);
-void swap_ptrs (int **ptr1, int **ptr2);
+int** swap_tables (int **tab_in, int col_number, int pop_size, int pop_alive, int pop_new);
+// void swap_ptrs (int **ptr1, int **ptr2);
 
 
 /* main function */
@@ -24,7 +25,7 @@ int main(int argc, char const *argv[])
   int popInit = 10;
 
   // birth probability
-  float pB = 0.1;
+  float pB = 0;
 
   // death probability 
   float pD = 0.1;
@@ -77,20 +78,17 @@ int main(int argc, char const *argv[])
   // initialize pop_size
   pop_size = popInit;
 
-  // debug OK
-  printf("pop init check \nx\ty\tDoA\tRepro \n");
-  for(int row = 0; row < popInit; row++)
-  {
-    for(int col = 0; col < col_number; ++col)
-    {
-      printf("%d\t", *(*(pop_table + row) + col) );
-    }
-    printf("\n");
-  }
-  printf("pop size is %d \n", pop_size);
-
-/*    // initiate a pointer to a temporary table*/
-/*    int **temp_table;*/
+  // // debug OK
+  // printf("pop init check \nx\ty\tDoA\tRepro \n");
+  // for(int row = 0; row < popInit; row++)
+  // {
+  //   for(int col = 0; col < col_number; ++col)
+  //   {
+  //     printf("%d\t", *(*(pop_table + row) + col) );
+  //   }
+  //   printf("\n");
+  // }
+  // printf("pop size is %d \n", pop_size);
 
   // for/while loop on time steps
   for (int t = 0; t < maxTs; ++t)
@@ -100,137 +98,53 @@ int main(int argc, char const *argv[])
     // individuals move
     update_movement(pop_table, pop_size, maxDist, S);
 
-    // debug OK
-    printf("after movement \nx\ty\tDoA\tRepro\n");
-    for(int row = 0; row < pop_size; row++)
-    {
-      for(int col = 0; col < col_number; ++col)
-      {
-        printf("%d\t", *(*(pop_table + row) + col) );
-      }
-      printf("\n");
-    } 
-    printf("pop size is %d \n", pop_size);
+    // // debug OK
+    // printf("after movement \nx\ty\tDoA\tRepro\n");
+    // for(int row = 0; row < pop_size; row++)
+    // {
+    //   for(int col = 0; col < col_number; ++col)
+    //   {
+    //     printf("%d\t", *(*(pop_table + row) + col) );
+    //   }
+    //   printf("\n");
+    // } 
+    // printf("pop size is %d \n", pop_size);
 
     // die
     pop_alive = update_death(pop_table, pop_size, pD);
 
-    // debug OK
-    printf("after selection \nx\ty\tDoA\tRepro\n");
-    for(int row = 0; row < pop_size; row++)
-    {
-      for(int col = 0; col < col_number; ++col)
-      {
-        printf("%d\t", *(*(pop_table + row) + col) );
-      }
-      printf("\n");
-    }
-    printf("pop size is %d \n", pop_size);
-    printf("pop alive is %d \n", pop_alive); 
+    // // debug OK
+    // printf("after selection \nx\ty\tDoA\tRepro\n");
+    // for(int row = 0; row < pop_size; row++)
+    // {
+    //   for(int col = 0; col < col_number; ++col)
+    //   {
+    //     printf("%d\t", *(*(pop_table + row) + col) );
+    //   }
+    //   printf("\n");
+    // }
+    // printf("pop size is %d \n", pop_size);
+    // printf("pop alive is %d \n", pop_alive); 
 
     // and survivors reproduce
     pop_new = update_birth(pop_table, pop_size, pop_alive, pB);
 
-    // debug OK
-    printf("after birth \nx\ty\tDoA\tRepro\n");
-    for(int row = 0; row < pop_size; row++)
-    {
-      for(int col = 0; col < col_number; ++col)
-      {
-        printf("%d\t", *(*(pop_table + row) + col) );
-      }
-      printf("\n");
-    }
-    printf("pop size is %d \n", pop_size);
-    printf("pop alive is %d \n", pop_alive); 
-    printf("pop new is %d \n", pop_new); 
+    // // debug OK
+    // printf("after birth \nx\ty\tDoA\tRepro\n");
+    // for(int row = 0; row < pop_size; row++)
+    // {
+    //   for(int col = 0; col < col_number; ++col)
+    //   {
+    //     printf("%d\t", *(*(pop_table + row) + col) );
+    //   }
+    //   printf("\n");
+    // }
+    // printf("pop size is %d \n", pop_size);
+    // printf("pop alive is %d \n", pop_alive); 
+    // printf("pop new is %d \n", pop_new);
 
-    /* change pop_table accordingly */
-
-    // initiate a pointer to a temporary table
-    int **temp_table;
-
-    // allocate memory to it
-    temp_table = malloc(pop_new * sizeof(int *));
-    for(int row = 0; row < pop_new; ++row)
-    {
-      *(temp_table + row) = malloc(col_number * sizeof(int));
-    }
-
-    // debug OK
-    printf("fresh temp_table \nx\ty\tDoA\tRepro\n");
-    for(int row = 0; row < pop_new; row++)
-    {
-      for(int col = 0; col < col_number; ++col)
-      {
-        printf("%d\t", *(*(temp_table + row) + col) );
-      }
-      printf("\n");
-    }
-
-    // track the living and copy their values to the new table
-    // need for a tracker of the survivors and new born
-    int i = 0;
-    int j = 0;
-
-    for (int row = 0; row < pop_size; ++row)
-    {   
-      // browse the livings and store them in the temp table
-      if ((*(*(pop_table + row) + 2)) == 1 && i < pop_alive)	// 
-      {
-        // copy the survivor values to the temp table
-        *(*(temp_table + i) + 0) = *(*(pop_table + row) + 0);
-        *(*(temp_table + i) + 1) = *(*(pop_table + row) + 1);
-        *(*(temp_table + i) + 2) = *(*(pop_table + row) + 2);
-
-	// reset repro to 0
-        *(*(temp_table + i) + 3) = 0;
-	
-	// if individual reproduced add it to the temp_table
-	if ((*(*(pop_table + row) + 3)) == 1)	// && j > (pop_new - pop_alive)
-	{
-	  // copy the parents coordinates to the temp table
-          *(*(temp_table + (pop_alive + j)) + 0) = *(*(pop_table + row) + 0);
-          *(*(temp_table + (pop_alive + j)) + 1) = *(*(pop_table + row) + 1);
-
-	  // alive and did not reproduced yet
-          *(*(temp_table + (pop_alive + j)) + 2) = 1;
-          *(*(temp_table + (pop_alive + j)) + 3) = 0;
-        }
-
-        // increment i and j
-        i += 1;
-	j += 1;
-      }
-    }
-
-    // debug
-    printf("temp_table \nx\ty\tDoA\tRepro\n");
-    for(int row = 0; row < pop_new; row++)
-    {
-      for(int col = 0; col < col_number; ++col)
-      {
-        printf("%d\t", *(*(temp_table + row) + col) );
-      }
-      printf("\n");
-    }
-
-    /* PROBLEM lIES HEREAFTER */
-    /* swap does not work */
-
-    // swap temp_table and pop_table
-    swap_ptrs(pop_table, temp_table);
-
-    /* let's try something else */
-/*    // update pop_table pointers*/
-/*    **pop_table = **temp_table;*/
-
-    // free temp_table
-    for(int row = 0; row < pop_new; ++row)
-    {
-      free(*(temp_table + row));
-    }
-    free(temp_table);
+    // change the content of pop_table
+    pop_table = swap_tables(pop_table, col_number, pop_size, pop_alive, pop_new);
     
     // update popsize
     pop_size = pop_new; 
@@ -254,13 +168,6 @@ int main(int argc, char const *argv[])
   	free(*(pop_table + row));
   }
   free(pop_table);
-
-/*    // free temp_table*/
-/*    for(int row = 0; row < pop_new; ++row)*/
-/*    {*/
-/*      free(*(temp_table + row));*/
-/*    }*/
-/*    free(temp_table);*/
 
   return 0;
 }
@@ -286,6 +193,7 @@ void update_movement (int **tab_in, int pop_size, int maxDist, int S)
     if (*(*(tab_in + row) + 1) < 0) { *(*(tab_in + row) + 1) *= -1;}
   }
 }
+
 
 /* death function */
 // takes a table in and updates it
@@ -317,6 +225,7 @@ int update_death(int **tab_in, int pop_size, float pD)
 
   return res;
 }
+
 
 /* birth function */
 int update_birth(int **tab_in, int pop_size, int pop_alive, float pB)
@@ -352,9 +261,92 @@ int update_birth(int **tab_in, int pop_size, int pop_alive, float pB)
   return res;
 }
 
-void swap_ptrs (int **ptr1, int **ptr2)
+
+/* function updating pop table */
+int** swap_tables (int **tab_in, int col_number, int pop_size, int pop_alive, int pop_new)
 {
-  int temp = **ptr1;
-  **ptr1 = **ptr2;
-  **ptr2 = temp;
+  // initialize returning pointer to pointers
+  int **tab_out = NULL;
+
+  // allocate mem to it
+  tab_out = malloc(pop_new * sizeof(int *));
+  for(int row = 0; row < pop_new; ++row)
+  {
+    *(tab_out + row) = malloc(col_number * sizeof(int));
+  }
+
+  // debug OK
+  printf("fresh tab_out \nx\ty\tDoA\tRepro\n");
+  for(int row = 0; row < pop_new; row++)
+  {
+    for(int col = 0; col < col_number; ++col)
+    {
+      printf("%d\t", *(*(tab_out + row) + col) );
+    }
+    printf("\n");
+  }
+
+  // fill it with the right info
+  // track the living and copy their values to the new table
+  // need for a tracker of the survivors and new born
+  int i = 0;
+  int j = 0;
+
+  for (int row = 0; row < pop_size; ++row)
+  {   
+    // browse the livings and store them in the temp table
+    if ((*(*(tab_in + row) + 2)) == 1 && i < pop_alive)  // 
+    {
+      // copy the survivor values to the temp table
+      *(*(tab_out + i) + 0) = *(*(tab_in + row) + 0);
+      *(*(tab_out + i) + 1) = *(*(tab_in + row) + 1);
+      *(*(tab_out + i) + 2) = *(*(tab_in + row) + 2);
+
+      // reset repro to 0
+      *(*(tab_out + i) + 3) = 0;
+  
+      // if individual reproduced add it to the tab_out
+      if ((*(*(tab_in + row) + 3)) == 1) // && j > (pop_new - pop_alive)
+      {
+        // copy the parents coordinates to the temp table
+        *(*(tab_out + (pop_alive + j)) + 0) = *(*(tab_in + row) + 0);
+        *(*(tab_out + (pop_alive + j)) + 1) = *(*(tab_in + row) + 1);
+
+        // alive and did not reproduced yet
+        *(*(tab_out + (pop_alive + j)) + 2) = 1;
+        *(*(tab_out + (pop_alive + j)) + 3) = 0;
+      }
+
+      // increment i and j
+      i += 1;
+      j += 1;
+    }
+  }
+
+  // debug
+  printf("tab_out \nx\ty\tDoA\tRepro\n");
+  for(int row = 0; row < pop_new; row++)
+  {
+    for(int col = 0; col < col_number; ++col)
+    {
+      printf("%d\t", *(*(tab_out + row) + col) );
+    }
+    printf("\n");
+  }
+
+  // free tab_in
+  for(int row = 0; row < pop_size; ++row)
+  {
+    free(*(tab_in + row));
+  }
+  free(tab_in);
+
+  return tab_out;
 }
+
+// void swap_ptrs (int **ptr1, int **ptr2)
+// {
+//   int temp = **ptr1;
+//   **ptr1 = **ptr2;
+//   **ptr2 = temp;
+// }
