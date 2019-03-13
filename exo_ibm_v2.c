@@ -2,6 +2,7 @@
 # include <stdlib.h>
 # include <time.h>
 
+
 /* function declaration */
 void update_movement (int **tab_in, int pop_size, int maxDist, int S);
 int update_death(int **tab_in, int pop_size, float pD);
@@ -54,6 +55,7 @@ int main(int argc, char const *argv[])
     *(pop_table + row) = malloc(col_number * sizeof(int));
   }
 
+  // initialize pop_tab
   for (int row = 0; row < popInit; ++row)
   {   
     // random values for the first two columns
@@ -86,6 +88,9 @@ int main(int argc, char const *argv[])
     printf("\n");
   }
   printf("pop size is %d \n", pop_size);
+
+    // initiate a pointer to a temporary table
+    int **temp_table;
 
   // for/while loop on time steps
   for (int t = 0; t < maxTs; ++t)
@@ -142,8 +147,8 @@ int main(int argc, char const *argv[])
 
     /* change pop_table accordingly */
 
-    // initiate a pointer to a temporary table
-    int **temp_table;
+/*    // initiate a pointer to a temporary table*/
+/*    int **temp_table;*/
 
     // allocate memory to it
     temp_table = malloc(pop_new * sizeof(int *));
@@ -211,16 +216,21 @@ int main(int argc, char const *argv[])
     }
 
     /* PROBLEM lIES HEREAFTER */
+    /* swap does not work */
 
-    // swap temp_table and pop_table
-    swap_ptrs(pop_table, temp_table);
+/*    // swap temp_table and pop_table*/
+/*    swap_ptrs(pop_table, temp_table);*/
 
-    // free temp_table
-    for(int row = 0; row < pop_new; ++row)
-    {
-      free(*(temp_table + row));
-    }
-    free(temp_table);
+    /* let's try something else */
+    // update pop_table pointers
+    **pop_table = **temp_table;
+
+/*    // free temp_table*/
+/*    for(int row = 0; row < pop_new; ++row)*/
+/*    {*/
+/*      free(*(temp_table + row));*/
+/*    }*/
+/*    free(temp_table);*/
     
     // update popsize
     pop_size = pop_new; 
@@ -244,6 +254,13 @@ int main(int argc, char const *argv[])
   	free(*(pop_table + row));
   }
   free(pop_table);
+
+    // free temp_table
+    for(int row = 0; row < pop_new; ++row)
+    {
+      free(*(temp_table + row));
+    }
+    free(temp_table);
 
   return 0;
 }
@@ -278,7 +295,7 @@ int update_death(int **tab_in, int pop_size, float pD)
   // count of births
   int death_count = 0;
   // new pop_size
-  int pop_alive;
+  int res = 0;
 
   // while/for loop on individuals in pop_table
   for (int row = 0; row < pop_size; ++row)
@@ -296,9 +313,9 @@ int update_death(int **tab_in, int pop_size, float pD)
   } 
 
   // update table size
-  pop_alive = pop_size - death_count;
+  res = pop_size - death_count;
 
-  return pop_alive;
+  return res;
 }
 
 /* birth function */
@@ -308,7 +325,7 @@ int update_birth(int **tab_in, int pop_size, int pop_alive, float pB)
   // count of births
   int birth_count = 0;
   // new pop_size
-  int pop_alive;
+  int res;
 
   // while/for loop on individuals in pop_table
   for (int row = 0; row < pop_size; ++row)
@@ -330,14 +347,14 @@ int update_birth(int **tab_in, int pop_size, int pop_alive, float pB)
   } 
 
   // update pop_size
-  pop_new = pop_alive + birth_count;
+  res = pop_alive + birth_count;
 
-  return pop_new;
+  return res;
 }
 
-void swap_ptrs (int **ptr1, int **ptr2)
-{
-  int temp = **ptr1;
-  **ptr1 = **ptr2;
-  **ptr2 = temp;
-}
+/*void swap_ptrs (int **ptr1, int **ptr2)*/
+/*{*/
+/*  int temp = **ptr1;*/
+/*  **ptr1 = **ptr2;*/
+/*  **ptr2 = temp;*/
+/*}*/
