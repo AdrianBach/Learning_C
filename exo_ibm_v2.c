@@ -89,8 +89,8 @@ int main(int argc, char const *argv[])
   }
   printf("pop size is %d \n", pop_size);
 
-    // initiate a pointer to a temporary table
-    int **temp_table;
+/*    // initiate a pointer to a temporary table*/
+/*    int **temp_table;*/
 
   // for/while loop on time steps
   for (int t = 0; t < maxTs; ++t)
@@ -147,8 +147,8 @@ int main(int argc, char const *argv[])
 
     /* change pop_table accordingly */
 
-/*    // initiate a pointer to a temporary table*/
-/*    int **temp_table;*/
+    // initiate a pointer to a temporary table
+    int **temp_table;
 
     // allocate memory to it
     temp_table = malloc(pop_new * sizeof(int *));
@@ -218,19 +218,19 @@ int main(int argc, char const *argv[])
     /* PROBLEM lIES HEREAFTER */
     /* swap does not work */
 
-/*    // swap temp_table and pop_table*/
-/*    swap_ptrs(pop_table, temp_table);*/
+    // swap temp_table and pop_table
+    swap_ptrs(pop_table, temp_table);
 
     /* let's try something else */
-    // update pop_table pointers
-    **pop_table = **temp_table;
+/*    // update pop_table pointers*/
+/*    **pop_table = **temp_table;*/
 
-/*    // free temp_table*/
-/*    for(int row = 0; row < pop_new; ++row)*/
-/*    {*/
-/*      free(*(temp_table + row));*/
-/*    }*/
-/*    free(temp_table);*/
+    // free temp_table
+    for(int row = 0; row < pop_new; ++row)
+    {
+      free(*(temp_table + row));
+    }
+    free(temp_table);
     
     // update popsize
     pop_size = pop_new; 
@@ -255,12 +255,12 @@ int main(int argc, char const *argv[])
   }
   free(pop_table);
 
-    // free temp_table
-    for(int row = 0; row < pop_new; ++row)
-    {
-      free(*(temp_table + row));
-    }
-    free(temp_table);
+/*    // free temp_table*/
+/*    for(int row = 0; row < pop_new; ++row)*/
+/*    {*/
+/*      free(*(temp_table + row));*/
+/*    }*/
+/*    free(temp_table);*/
 
   return 0;
 }
@@ -352,9 +352,9 @@ int update_birth(int **tab_in, int pop_size, int pop_alive, float pB)
   return res;
 }
 
-/*void swap_ptrs (int **ptr1, int **ptr2)*/
-/*{*/
-/*  int temp = **ptr1;*/
-/*  **ptr1 = **ptr2;*/
-/*  **ptr2 = temp;*/
-/*}*/
+void swap_ptrs (int **ptr1, int **ptr2)
+{
+  int temp = **ptr1;
+  **ptr1 = **ptr2;
+  **ptr2 = temp;
+}
