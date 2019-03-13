@@ -80,7 +80,7 @@ int main(int argc, char const *argv[])
   pop_size = popInit;
 
   // debug OK
-  printf("pop init check \nx\ty\tDoA\tRepro \n");
+  printf("pop init \nx\ty\tDoA\tRepro \n");
   for(int row = 0; row < popInit; row++)
   {
     for(int col = 0; col < col_number; ++col)
