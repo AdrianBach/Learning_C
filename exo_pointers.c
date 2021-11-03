@@ -40,7 +40,11 @@ int main(int argc, char const *argv[])
 	/* quand t'es un vrai tu liberes la memoire que t'a utilise plus haut car personne ne le fera pour toi */
 	//free(var);
 	/* la ca marche pas car c'est un integer je crois, mais jsais pas pourquoue */
-	//free(*pointer_var);
+	free(pointer_var);
+	// j'ai essayé avec '*' et '&' et c'est sans rien que ça marche, peut-être que c'est parce que c'est a pointer_var qu'on a fait malloc
+	// en plus '&' renvoit a l'adresse du premier bit de la serie donc ca pouvait pas marcher
+	// '*' c'est l'adresse du premier bit + l'info sur la longueur (int, char, etc...)
+	// c'est ce qu'il y a a cette adresse (pointer_var) qu'on veut effacer, on ne veut pas effacer l'emplacement, on veut le vider
 
 	return 0;
 }

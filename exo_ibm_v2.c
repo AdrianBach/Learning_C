@@ -34,7 +34,7 @@ int main(int argc, char const *argv[])
   // maximal moving distance (could be a proportion of world's size)
   int maxDist = 3;
 
-  // four column: x, y, DoA, and reproduction
+  // four columns: x, y, DoA, and reproduction
   int col_number = 4;
   
   // declare tracked variables
@@ -51,7 +51,9 @@ int main(int argc, char const *argv[])
   int **pop_table;
   
   // allocate memory
+  // allocate first column
   pop_table = malloc(popInit * sizeof(int *));
+  // allocate other columns to each row
   for(int row = 0; row < popInit; ++row)
   {
     *(pop_table + row) = malloc(col_number * sizeof(int));
