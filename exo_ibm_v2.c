@@ -17,7 +17,7 @@ int main(int argc, char const *argv[])
 {
   // define constants
   // max time step
-  int maxTs = 3;
+  int maxTs = 10;
 
   // World's size
   int S = 40;
@@ -190,10 +190,14 @@ void update_movement (int **tab_in, int pop_size, int maxDist, int S)
     *(*(tab_in + row) + 1) += r2;
 
     // check for world boundaries (reflective)
-    if (*(*(tab_in + row) + 0) > S) { *(*(tab_in + row) + 0) = S - ((*(*(tab_in + row) + 0)) - S);}
-    if (*(*(tab_in + row) + 0) < 0) { *(*(tab_in + row) + 0) *= -1;}
-    if (*(*(tab_in + row) + 1) > S) { *(*(tab_in + row) + 1) = S - ((*(*(tab_in + row) + 1)) - S);}
-    if (*(*(tab_in + row) + 1) < 0) { *(*(tab_in + row) + 1) *= -1;}
+    if (*(*(tab_in + row) + 0) > S) 
+      { *(*(tab_in + row) + 0) = S - ((*(*(tab_in + row) + 0)) - S);}
+    if (*(*(tab_in + row) + 0) < 0) 
+      { *(*(tab_in + row) + 0) *= -1;}
+    if (*(*(tab_in + row) + 1) > S) 
+      { *(*(tab_in + row) + 1) = S - ((*(*(tab_in + row) + 1)) - S);}
+    if (*(*(tab_in + row) + 1) < 0) 
+      { *(*(tab_in + row) + 1) *= -1;}
   }
 }
 
@@ -203,7 +207,7 @@ void update_movement (int **tab_in, int pop_size, int maxDist, int S)
 int update_death(int **tab_in, int pop_size, float pD)
 {
   // local variables
-  // count of births
+  // count of deaths
   int death_count = 0;
   // new pop_size
   int res = 0;
@@ -245,7 +249,7 @@ int update_birth(int **tab_in, int pop_size, int pop_alive, float pB)
     // only living individuals reproduce
     if (*(*(tab_in + row) + 2) == 1)
     {
-      // test for death
+      // test for birth
       // generate a random number between 0 and 1
       float r = rand()/(double)(RAND_MAX);
 
@@ -291,13 +295,13 @@ int** swap_tables (int **tab_in, int col_number, int pop_size, int pop_alive, in
 
   // fill it with the right info
   // track the living and copy their values to the new table
-  // need for a tracker of the survivors and new born
+  // trackers of the survivors and new born
   int i = 0;
   int j = 0;
 
   for (int row = 0; row < pop_size; ++row)
   {   
-    // browse the livings and store them in the temp table
+    // browse the living and store them in the temporary table
     if ((*(*(tab_in + row) + 2)) == 1 && i < pop_alive)  // 
     {
       // copy the survivor values to the temp table
@@ -312,14 +316,14 @@ int** swap_tables (int **tab_in, int col_number, int pop_size, int pop_alive, in
       // // reset repro to 0
       // *(*(tab_out + i) + 3) = 0;
   
-      // if individual reproduced add its offspring to tab_out
+      // if individual reproduced add its offspring to tab_out at its parent's coordinates
       if ((*(*(tab_in + row) + 3)) == 1) // && j > (pop_new - pop_alive)
       {
         // copy the parents coordinates to the temp table
         *(*(tab_out + (pop_alive + j)) + 0) = *(*(tab_in + row) + 0);
         *(*(tab_out + (pop_alive + j)) + 1) = *(*(tab_in + row) + 1);
 
-        // alive and did not reproduced yet
+        // offspring are alive and did not reproduced yet
         *(*(tab_out + (pop_alive + j)) + 2) = 1;
         *(*(tab_out + (pop_alive + j)) + 3) = 0;
         
@@ -353,6 +357,7 @@ int** swap_tables (int **tab_in, int col_number, int pop_size, int pop_alive, in
   return tab_out;
 }
 
+// function to reinitialise reproduction tracker at the begining of every iteration
 void init_repro (int **tab_in, int pop_size)
 {
   // browse lines and set the fourth column value to 0
